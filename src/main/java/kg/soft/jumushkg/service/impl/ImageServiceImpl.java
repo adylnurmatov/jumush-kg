@@ -111,7 +111,7 @@ public class ImageServiceImpl implements ImageService {
         Image image1 = imageRepository.saveAndFlush(image);
         String url = PATH+image1.getId();
 
-        image1.setPath(url);
+
         return imageRepository.saveAndFlush(image1);
     }
 

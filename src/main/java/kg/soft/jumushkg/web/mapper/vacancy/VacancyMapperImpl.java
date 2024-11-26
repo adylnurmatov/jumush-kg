@@ -36,4 +36,24 @@ public class VacancyMapperImpl implements VacancyMapper{
         }
         return vacancyDtos;
     }
+
+    @Override
+    public Vacancy toEntity(VacancyDto vacancyDto) {
+        return new Vacancy(
+                vacancyDto.getId(),
+                vacancyDto.getCompanyName(),
+                vacancyDto.getDescription(),
+                vacancyDto.getSkills(),
+                vacancyDto.getCountry(),
+                vacancyDto.getCity(),
+                vacancyDto.getAboutCompany(),
+                vacancyDto.getEmploymentType(),
+                vacancyDto.getCreatedAt(),
+                vacancyDto.getVacancyStatus(),
+                vacancyDto.getSalary(),
+                vacancyDto.getViews(),
+                vacancyDto.getRespondents(),
+                vacancyDto.getPosition()
+        );
+    }
 }

@@ -10,4 +10,5 @@ import java.util.List;
 public interface VacancyMapper {
     VacancyDto toDto(Vacancy vacancy);
     List<VacancyDto> toDtos(List<Vacancy> vacancies);
+    Vacancy toEntity(VacancyDto vacancyDto);
 }

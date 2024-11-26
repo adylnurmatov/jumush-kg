@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import kg.soft.jumushkg.domain.entity.user.JobSeeker;
 import kg.soft.jumushkg.domain.enums.EmploymentType;
 import kg.soft.jumushkg.domain.enums.VacancyStatus;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @Setter
 @Getter
 @Entity
+@AllArgsConstructor
 public class Vacancy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,4 +38,8 @@ public class Vacancy {
     private List<JobSeeker> respondents;
     @OneToOne
     private Position position;
+
+    public Vacancy() {
+
+    }
 }

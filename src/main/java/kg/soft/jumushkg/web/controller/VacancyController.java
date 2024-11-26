@@ -53,31 +53,6 @@ public class VacancyController {
     public List<VacancyDto> vacancySearch(@RequestParam(required = false) String search) {
         return vacancyService.searchVacancy(search);
     }
-    @GetMapping("/vacancy/filter")
-    public List<VacancyDto> filter(@RequestParam(required = false) String category, @RequestParam(required = false) String position, @RequestParam(required = false) String country,
-                                                    @RequestParam(required = false) String city, @RequestParam(required = false) String experience, @RequestParam(required = false)
-                                                    String typeOfEmployments, @RequestParam(required = false) Boolean salary,
-                                                    @RequestParam(required = false) Boolean date) {
-
-
-        return vacancyService.filter(category, position, country, city, experience, typeOfEmployments, salary, date);
-    }
-
-    @GetMapping("/employer/vacancies/search/{userId}")
-    List<VacancyDto> employerVacanciesSearchUserId(@PathVariable Long userId,
-                                                        @RequestParam(required = false) String search) {
-        return vacancyService.employerVacanciesSearchUserId(userId, search);
-    }
-
-    @GetMapping("/employer/vacancies/filter/{userId}")
-    List<VacancyDto> employerVacanciesFilterUserId(@PathVariable
-                                                        Long userId, @RequestParam(required = false) String respondedCount,
-                                                        @RequestParam(required = false) String byDate, @RequestParam
-                                                                (required = false) String byStatusOfVacancy) {
-
-        return vacancyService.employerVacanciesFilterUserId(userId, respondedCount, byDate, byStatusOfVacancy);
-    }
-
 
 
     @GetMapping("/vacancies/{userId}")
@@ -95,26 +70,4 @@ public class VacancyController {
     }
 
 
-
-    @GetMapping("/aboutVacancy/{vacancyId}")
-    public VacancyDto aboutVacancy(@PathVariable Long vacancyId) {
-        return vacancyService.aboutVacancy(vacancyId);
-    }
-
-    @GetMapping("/sortedTwoSameVacancy/{vacancyId}")
-    public List<VacancyDto> sortedTwoVacancy(@PathVariable Long vacancyId) {
-        return vacancyService.sortedTwoVacancies(vacancyId);
-    }
-
-    @GetMapping("/popularCategory")
-    public List<VacancyDto> getCategoryCounts() {
-        return vacancyService.getVacancyCountByCategory();
-    }
-
-
-
-    @GetMapping("/get/list/popular/position")
-    public List<VacancyDto> getPopularPositions(){
-        return vacancyService.getPopularPosition();
-    }
 }

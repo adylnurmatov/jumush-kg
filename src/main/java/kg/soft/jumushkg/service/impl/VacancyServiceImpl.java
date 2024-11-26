@@ -1,11 +1,16 @@
 package kg.soft.jumushkg.service.impl;
 
 
+import kg.soft.jumushkg.domain.entity.user.Employer;
+import kg.soft.jumushkg.domain.entity.userInfo.Vacancy;
+import kg.soft.jumushkg.domain.enums.VacancyStatus;
+import kg.soft.jumushkg.repository.EmployerRepository;
 import kg.soft.jumushkg.repository.VacancyRepository;
 import kg.soft.jumushkg.service.VacancyService;
 import kg.soft.jumushkg.web.dto.vacancy.VacancyDto;
 import kg.soft.jumushkg.web.mapper.vacancy.VacancyMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,53 +20,63 @@ import java.util.List;
 public class VacancyServiceImpl implements VacancyService {
     private final VacancyMapper vacancyMapper;
     private final VacancyRepository vacancyRepository;
+    private final EmployerRepository employerRepository;
+
     @Override
     public VacancyDto saveVacancy(Long id, VacancyDto vacancyDto) {
-        return null;
+        Vacancy vacancy = vacancyMapper.toEntity(vacancyDto);
+        vacancyRepository.save(vacancy);
+        return vacancyDto;
     }
     @Override
     public boolean delete(Long id) {
-        return false;
+        vacancyRepository.deleteById(id);
+        return true;
     }
 
     @Override
     public List<VacancyDto> getAll() {
-        return null;
+        return vacancyMapper.toDtos(vacancyRepository.findAll());
     }
 
     @Override
     public VacancyDto update(Long id, VacancyDto vacancyRequest) {
-        return null;
+        Vacancy vacancy = vacancyRepository.findById(id).orElseThrow(() -> new BadCredentialsException("NOT_FOUND"));
+        vacancy.setCompanyName(vacancyRequest.getCompanyName());
+        vacancy.setDescription(vacancyRequest.getDescription());
+        vacancy.setSkills(vacancyRequest.getSkills());
+        vacancy.setCountry(vacancyRequest.getCountry());
+        vacancy.setCity(vacancyRequest.getCity());
+        vacancy.setAboutCompany(vacancyRequest.getAboutCompany());
+        vacancy.setEmploymentType(vacancyRequest.getEmploymentType());
+        vacancy.setCreatedAt(vacancyRequest.getCreatedAt());
+        vacancy.setVacancyStatus(vacancyRequest.getVacancyStatus());
+        vacancy.setSalary(vacancyRequest.getSalary());
+        vacancy.setViews(vacancyRequest.getViews());
+        vacancy.setRespondents(vacancyRequest.getRespondents());
+        vacancy.setPosition(vacancyRequest.getPosition());
+        vacancyRepository.save(vacancy);
+        return vacancyRequest;
     }
 
-    @Override
+
     public List<VacancyDto> jobSeekerVacancies() {
-        return null;
+        return vacancyMapper.toDtos(vacancyRepository.findAll());
     }
 
     @Override
     public List<VacancyDto> getMyVacancies(Long id) {
-        return null;
+        Employer employer = employerRepository.findById(id).orElseThrow();
+        return vacancyMapper.toDtos(employer.getVacancies());
     }
 
     @Override
     public List<VacancyDto> searchVacancy(String search) {
-        return null;
-    }
-
-    @Override
-    public List<VacancyDto> filter(String category, String position, String country, String city, String experience, String typeOfEmployments, Boolean salary, Boolean date) {
-        return null;
-    }
-
-    @Override
-    public VacancyDto updateById(Long id, VacancyDto vacancyDto) {
-        return null;
-    }
-
-    @Override
-    public VacancyDto updateEmployerVacancyByIds(Long employerId, Long vacancyId, VacancyDto vacancyRequest) {
-        return null;
+        if(search == null || search.isEmpty()) {
+            return vacancyMapper.toDtos(vacancyRepository.findAll());
+        } else {
+            return vacancyMapper.toDtos(vacancyRepository.searchVacancy(search));
+        }
     }
 
     @Override
@@ -69,44 +84,17 @@ public class VacancyServiceImpl implements VacancyService {
 
     }
 
+
     @Override
     public void setStatusOfVacancy(Long id, String statusOfVacancy) {
-
+        Vacancy vacancy = vacancyRepository.findById(id).orElseThrow();
+        vacancy.setVacancyStatus(VacancyStatus.valueOf(statusOfVacancy));
     }
 
-    @Override
-    public List<VacancyDto> sortedTwoVacancies(Long vacancyId) {
-        return null;
-    }
 
-    @Override
-    public List<VacancyDto> employerVacanciesSearchUserId(Long userId, String search) {
-        return null;
-    }
-
-    @Override
-    public List<VacancyDto> getAllVacancy(String vacancyName, String filterType) {
-        return null;
-    }
-
-    @Override
-    public List<VacancyDto> getVacancyCountByCategory() {
-        return null;
-    }
-
-    @Override
     public List<VacancyDto> getPopularPosition() {
         return vacancyMapper.toDtos(vacancyRepository.findTop5ByOrderByViewsAsc());
 
     }
 
-    @Override
-    public VacancyDto aboutVacancy(Long vacancyId) {
-        return null;
-    }
-
-    @Override
-    public List<VacancyDto> employerVacanciesFilterUserId(Long userId, String respondedCount, String byDate, String byStatusOfVacancy) {
-        return null;
-    }
 }

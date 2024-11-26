@@ -31,4 +31,7 @@ public class Employer extends User{
         super(username, email, password, role);
     }
 
+    public Employer() {
+
+    }
 }

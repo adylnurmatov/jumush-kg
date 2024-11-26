@@ -3,6 +3,7 @@ package kg.soft.jumushkg.service.impl;
 
 import kg.soft.jumushkg.domain.entity.user.JobSeeker;
 import kg.soft.jumushkg.domain.entity.userInfo.Education;
+import kg.soft.jumushkg.domain.entity.userInfo.Image;
 import kg.soft.jumushkg.domain.entity.userInfo.Position;
 import kg.soft.jumushkg.domain.exception.ResourceNotFoundException;
 import kg.soft.jumushkg.repository.JobSeekerRepository;
@@ -13,7 +14,9 @@ import kg.soft.jumushkg.web.dto.user.UserDto;
 import kg.soft.jumushkg.web.mapper.jobSeeker.JobSeekerMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -93,5 +96,30 @@ public class JobSeekerServiceImpl implements JobSeekerService {
         JobSeeker jobSeeker = new JobSeeker();
         String name = jobSeeker.getUsername();
         return null;
+    }
+
+
+    private Image toImageEntity(MultipartFile file1) throws IOException {
+        Image image = new Image();
+        image.setName(file1.getName());
+        image.setContentType(file1.getContentType());
+        image.setOriginalFileName(file1.getOriginalFilename());
+        image.setSize(file1.getSize());
+        image.setBytes(file1.getBytes());
+        return image;
+
+    }
+
+    public void addAvatar(MultipartFile file, Long userId) {
+        if(file.getSize() != 0) {
+            Image image = new Image();
+            try {
+                image = toImageEntity(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            JobSeeker user = jobSeekerRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("NOT_FOUND"));
+            user.setProfilePicture(image);
+        }
     }
 }
