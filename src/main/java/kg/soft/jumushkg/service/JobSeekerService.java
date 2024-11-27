@@ -31,9 +31,8 @@ public interface JobSeekerService {
 
 
 
-    List<JobSeekerDto> searchByFirstAndLastName(
-            String firstname,
-            String lastname
+    List<JobSeekerDto> searchByName(
+            String name
     );
 
     List<Position> getAllPositions();

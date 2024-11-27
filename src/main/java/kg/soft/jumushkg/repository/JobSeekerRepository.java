@@ -13,13 +13,14 @@ public interface JobSeekerRepository extends JpaRepository<JobSeeker, Long> {
     List<JobSeeker> findAllByUsername(String username);
 
     @Query("SELECT DISTINCT js FROM JobSeeker js " +
-            "LEFT JOIN FETCH js.professions p " +
-            "LEFT JOIN js.educationJobs e " +
-            "WHERE (:position = '' or :position IS NULL OR p.position.name = :position) " +
-            "AND (:education IS NULL OR e.education = :education) " +
-            "AND (:country = '' or :country IS NULL OR js.country = :country) " +
-            "AND (:city = '' or :city IS NULL OR js.city = :city) " +
-            "AND (:experience = '' or :experience IS NULL OR js.experienceJ.name = :experience)")
+            "LEFT JOIN js.profession p " +
+            "LEFT JOIN p.position pos " +
+            "LEFT JOIN js.education e " +
+            "WHERE (:position IS NULL OR :position = '' OR pos.name = :position) " +
+            "AND (:education IS NULL OR e = :education) " +
+            "AND (:country IS NULL OR :country = '' OR js.country = :country) " +
+            "AND (:city IS NULL OR :city = '' OR js.city = :city) " +
+            "AND (:experience IS NULL OR :experience = '' OR js.about LIKE %:experience%)")
     List<JobSeeker> filterJobSeekers(
             @Param("position") String position,
             @Param("education") Education education,
@@ -28,13 +29,11 @@ public interface JobSeekerRepository extends JpaRepository<JobSeeker, Long> {
             @Param("experience") String experience
     );
 
-
     @Query("SELECT js FROM JobSeeker js " +
-            "WHERE (:firstname IS NULL OR js.firstname = :firstname) " +
-            "AND (:lastname IS NULL OR js.lastname = :lastname) " )
+            "WHERE (:firstname IS NULL OR js.username = :username)")
     List<JobSeeker> searchJobSeekers(
-            String firstname,
-            String lastname
-
+            @Param("username") String username
     );
+
+
 }

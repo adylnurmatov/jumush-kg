@@ -78,10 +78,9 @@ public class JobSeekerServiceImpl implements JobSeekerService {
 
 
     @Override
-    public List<JobSeekerDto> searchByFirstAndLastName(String firstname, String lastname) {
+    public List<JobSeekerDto> searchByName(String name) {
         return jobSeekerMapper.toDtos(jobSeekerRepository.searchJobSeekers(
-                firstname != null && !firstname.isEmpty() ? firstname : null,
-                lastname != null && !lastname.isEmpty() ? lastname : null
+                name != null && !name.isEmpty() ? name : null
 
         ));
     }

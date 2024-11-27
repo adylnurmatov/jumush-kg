@@ -45,17 +45,11 @@ public class JobSeekerController {
         return jobSeekerService.getById(jobSeekerId);
     }
 
-
     @PostMapping("/update/jobseeker/{id}")
     public JobSeekerDto update(@PathVariable("id") Long id, @RequestBody JobSeekerDto jobSeeker) {
         return jobSeekerService.update(id, jobSeeker);
     }
 
-
-    @GetMapping("/vacancies")
-    public List<VacancyDto> getVacancies() {
-        return vacancyService.getAll();
-    }
     @GetMapping("/candidate/filter")
     public List<JobSeekerDto> filter2(@RequestParam(required = false) Position position,
                                             @RequestParam(required = false) Education education,

@@ -58,6 +58,10 @@ public class ApplicationConfig {
                 .authorizeHttpRequests(configurer ->
                         configurer.requestMatchers("/api/v1/auth/**")
                                 .permitAll()
+                                .requestMatchers("/swagger-ui/**")
+                                .permitAll()
+                                .requestMatchers("/v3/api-docs/**")
+                                .permitAll()
                                 .anyRequest().authenticated())
                 .exceptionHandling(configurer ->
                         configurer.authenticationEntryPoint(
@@ -67,7 +71,7 @@ public class ApplicationConfig {
                                                             .value()
                                             );
                                             response.getWriter()
-                                                    .write("Unauthorized");
+                                                    .write("Unauthorized.0");
                                         })
                                 .accessDeniedHandler(
                                         (request, response, exception) -> {
@@ -76,7 +80,7 @@ public class ApplicationConfig {
                                                             .value()
                                             );
                                             response.getWriter()
-                                                    .write("Unauthorized");
+                                                    .write("Unauthorized.1");
                                         }))
                 .anonymous(AbstractHttpConfigurer::disable)
                 .addFilterBefore(new JwtTokenFilter(jwtTokenProvider),
